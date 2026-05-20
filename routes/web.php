@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RcaSimpleAuthController;
 use App\Http\Controllers\RcaOfferController;
+use App\Http\Controllers\RcaChatbotController;
 
 Route::get('/', function () {
     return redirect()->route('rca.login');
@@ -20,9 +21,9 @@ Route::post('/rca-logout', [RcaSimpleAuthController::class, 'logout'])
 Route::middleware('rca.auth')->group(function () {
 
     Route::get('/rca-dashboard', function () {
-            return view('rca.dashboard');
-        })->name('rca.dashboard');
-        
+        return view('rca.dashboard');
+    })->name('rca.dashboard');
+
     Route::get('/rca-offer', [RcaOfferController::class, 'create'])
         ->name('rca.offer.create');
 
@@ -37,4 +38,13 @@ Route::middleware('rca.auth')->group(function () {
 
     Route::get('/rca-policy/{policyId}/download', [RcaOfferController::class, 'downloadPolicyPdf'])
         ->name('rca.policy.download');
+
+    Route::get('/rca/chatbot', [RcaChatbotController::class, 'index'])
+        ->name('rca.chatbot');
+
+    Route::post('/rca/chatbot/create-offer', [RcaChatbotController::class, 'createOffer'])
+        ->name('rca.chatbot.createOffer');
+        Route::post('/rca/chatbot/policy', [RcaChatbotController::class, 'generatePolicy'])
+    ->name('rca.chatbot.policy');
+    
 });
